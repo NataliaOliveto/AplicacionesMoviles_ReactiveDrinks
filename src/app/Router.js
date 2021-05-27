@@ -6,7 +6,7 @@ import SurpriseCard from "../pages/SurpriseCard";
 
 const Router = () => {
 
-    const [drink, setDrink] = React.useState("");
+    const [drink, setDrink] = React.useState();
     const [favorite, setFavorite] = React.useState([]);
 
     function handleSetDrink(drink) {

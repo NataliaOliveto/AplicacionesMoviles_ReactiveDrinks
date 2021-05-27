@@ -48,10 +48,10 @@ const Home = ({ setDrink }) => {
             placeholder="your favorite drink"
             value={input} 
             onChange={handleInputChange} 
-            type="search" />
+            type="text" />
         </div>
             <ButtonsWrapper>
-                <button onClick={handleSearchClick}>Find drink</button>
+                <button disabled={!input} onClick={handleSearchClick}>Find drink</button>
                 <button onClick={handleSurpriseClick}>Surprise drink</button>
             </ButtonsWrapper>
             
@@ -92,6 +92,12 @@ const ButtonsWrapper = styled.div`
         filter: brightness(1.20);
         transform: translateY(2px);        
         font-weight: 600;
+        }
+        &:disabled{
+        filter: none;
+        transform: none;
+        text-decoration-line: line-through;
+        cursor: default;
         }
         &:first-child {
         width: 50%;

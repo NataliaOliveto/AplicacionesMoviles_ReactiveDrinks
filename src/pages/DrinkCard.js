@@ -8,36 +8,43 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
     const history = useHistory();
     const [status, setStatus] = React.useState("idle");
 
+    console.log(drink)
     React.useEffect(() => {
         setStatus("loading")
         fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
         .then((response) => response.json()
-        .then((data) => setDrinkData(data)))
+        .then((data) => {
+            if(data.drinks === null){
+                setStatus("error")
+            } else {
+                setDrinkData(data)
+                setStatus("success")
+            }
+        }))
         .catch(error => setStatus("error"))
-        .finally(setStatus("idle"))
     }, [drink]);
 
-    if(status === "idle"){
+    if(drinkData && status === "success"){
         return (
             <DrinkDetails>
-                <h2>{drinkData && drinkData.drinks[0].strDrink}</h2>
-                    <h3>{drinkData && drinkData.drinks[0].strAlcoholic} drink</h3>        
-                    {drinkData && (<img src={drinkData.drinks[0].strDrinkThumb} alt={drinkData.drinks[0].strDrink}></img>)  }
+                <h2>{drinkData.drinks[0].strDrink}</h2>
+                    <h3>{drinkData.drinks[0].strAlcoholic} drink</h3>        
+                    {<img src={drinkData.drinks[0].strDrinkThumb} alt={drinkData.drinks[0].strDrink}></img>  }
                     <h3>Recipe</h3>
-                    <p>{drinkData && drinkData.drinks[0].strInstructions}</p>
+                    <p>{drinkData.drinks[0].strInstructions}</p>
                     <ButtonsWrapper>
                         <button onClick={() => history.push("./")}>Back Home</button>
                     </ButtonsWrapper>
             </DrinkDetails>
         ) ;  
-    } else if(!drinkData && status === "loading"){
+    } else if(status === "loading"){
             return "Loading...";
     }
-    else if (status === "error"){
+    else if (!drinkData || status === "error"){
         return "We don't know that drink (yet)";
     }
-    
-    /*const favoriteNames = favorite.map(favorite => favorite.strDrink)
+    /*
+    const favoriteNames = favorite.map(favorite => favorite.strDrink)
     const isDrinkFavorite = drinkData && favoriteNames.includes(drinkData.drinks[0].strDrink);
 
     console.log(addFavorite(drinkData.[0].strDrink));
@@ -49,7 +56,6 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
                     }>
                     {isDrinkFavorite ? "Remove Fav" : "Add Fav"}
                 </button> */
-    //if(drinkData){return}
 };
 
 const DrinkDetails = styled.div`
