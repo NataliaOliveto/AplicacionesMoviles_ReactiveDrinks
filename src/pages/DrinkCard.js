@@ -1,44 +1,50 @@
 import React from "react";
-import { useHistory } from 'react-router';
 import styled from "styled-components";
 
 const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
 
     const [drinkData, setDrinkData] = React.useState();
-    const history = useHistory();
     const [status, setStatus] = React.useState("idle");
 
-    console.log(drink)
     React.useEffect(() => {
         setStatus("loading")
         fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
         .then((response) => response.json()
         .then((data) => {
             if(data.drinks === null){
-                setStatus("error")
+                setStatus("error");
             } else {
-                setDrinkData(data)
-                setStatus("success")
+                setDrinkData(data);
+                setStatus("success");
             }
         }))
         .catch(error => setStatus("error"))
     }, [drink]);
 
     if(drinkData && status === "success"){
-        return (
-            <DrinkDetails>
-                <h2>{drinkData.drinks[0].strDrink}</h2>
-                    <h3>{drinkData.drinks[0].strAlcoholic} drink</h3>        
-                    {<img src={drinkData.drinks[0].strDrinkThumb} alt={drinkData.drinks[0].strDrink}></img>  }
-                    <h3>Recipe</h3>
-                    <p>{drinkData.drinks[0].strInstructions}</p>
-                    <ButtonsWrapper>
-                        <button onClick={() => history.push("./")}>Back Home</button>
-                    </ButtonsWrapper>
-            </DrinkDetails>
-        ) ;  
+        
+        return(
+            <Results>
+                <h2>Our recommended drinks for: { drink.toUpperCase() }</h2> 
+                {drinkData.drinks.map(eachDrink => (
+                <DrinkDetails>
+                    <div>
+                    <h2>{eachDrink.strDrink}</h2>
+                    <h3>{eachDrink.strAlcoholic} | {eachDrink.strCategory}</h3>        
+                    {<img src={eachDrink.strDrinkThumb} alt={eachDrink.strDrink}></img>  }
+                    <h3>↓ Recipe details ↓</h3>
+                    <p>{eachDrink.strInstructions}</p>
+                    </div>
+                </DrinkDetails>
+                ))}
+                
+            </Results>
+        )        
+
     } else if(status === "loading"){
-            return "Loading...";
+            return (                
+                "loading"
+            );
     }
     else if (!drinkData || status === "error"){
         return "We don't know that drink (yet)";
@@ -58,11 +64,27 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
                 </button> */
 };
 
+
+
+const Results = styled.div`
+    h2{
+        font-size: 15px;
+        color: grey;  
+        padding: 20px;
+        text-align: left;
+        border-bottom: 1px solid #f2f2f2;
+    }
+`
 const DrinkDetails = styled.div`
+    
     box-shadow: 1px 3px 5px rgba(0,0,0,0.1); 
     padding: 15px;
     text-align: justify;
     border-radius: 15px;
+    margin: 30px;
+    width: 500px;
+    animation-name: fadein;
+    animation-duration: 2s;
 
     h2{
         font-size: 20px;
@@ -89,32 +111,14 @@ const DrinkDetails = styled.div`
         text-align: center;
         border-radius: 10px;
     }
-`
-const ButtonsWrapper = styled.div`
 
-    button {
-        background-color: #f1356d;
-        color: #fff;
-        border: 0;
-        padding: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.75em;
-        display: block;
-        margin: auto;
-        text-align: center;  
-        margin-top: 8px;
-        cursor: pointer;
-        transition: all ease-out 0.1s;
+    p{
+        position: relative;
+    }
 
-        &:hover {
-        filter: brightness(1.20);
-        transform: translateY(2px);        
-        font-weight: 600;
-        }
-        &:first-child {
-        width: 50%;
-        }
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }           
     }
 `
 

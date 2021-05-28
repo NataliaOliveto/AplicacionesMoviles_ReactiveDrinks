@@ -1,21 +1,19 @@
-/*import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const Navbar = () => {    
-
-    return ( 
+const Navbar = () => {
+    return (
         <NavbarStyle>
-            <h1>Cocktails blog</h1>
-            
+            <img src="./img/icon.png" alt="logo"></img>
+            <h1>Reactive Drinks</h1>
             <div className="links">
-                <a href="/">Home</a>
-                <a href="/favourites">Favourites</a>
+            <Link to="/">Home</Link>
             </div>
         </NavbarStyle>
     );
 }
 
-const NavbarStyle = styled.div`
+const NavbarStyle = styled.nav`
 
     padding: 20px;
     display: flex;
@@ -23,8 +21,11 @@ const NavbarStyle = styled.div`
     max-width: 600px;
     margin: 0 auto;
     border-bottom: 1px solid #f2f2f2;
-
+    position: sticky; 
+    top: 0;
+    background-color: white;
     h1 {
+        padding-left: 20px;
         color: #f1356d;
     }
     .links {
@@ -39,8 +40,30 @@ const NavbarStyle = styled.div`
         &:hover {
         color: #f1356d;
         }
+    }  
+
+    button {
+
+    background-color: #f1356d;
+        color: #fff;
+        border: 0;
+        padding: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.75em;
+        display: block;
+        margin: auto;
+        text-align: center;  
+        margin-top: 8px;
+        cursor: pointer;
+        transition: all ease-out 0.1s;
+        &:hover {
+        filter: brightness(1.20);
+        transform: translateY(2px);        
+        font-weight: 600;
+        } 
     }
-    
+
 `
 
-export default Navbar;*/
+export default Navbar;

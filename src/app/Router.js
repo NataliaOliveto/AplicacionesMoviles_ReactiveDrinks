@@ -3,6 +3,8 @@ import React from "react";
 import DrinkCard from '../pages/DrinkCard';
 import Home from '../pages/Home';
 import SurpriseCard from "../pages/SurpriseCard";
+import NotFound from "../pages/NotFound";
+import Navbar from "./Navbar";
 
 const Router = () => {
 
@@ -24,14 +26,17 @@ const Router = () => {
     return (
     <div className="content">
         <BrowserRouter>
+        <div>
+        <Navbar />
+        <div>
             <Switch>
                 <Route exact path="/">
                     <Home setDrink={handleSetDrink}/>
                 </Route>
         
                 <Route path="/card">
-                    <DrinkCard 
-                    drink={drink} 
+                <DrinkCard 
+                    drink={drink}
                     addFavorite={handleAddFavorite}
                     favorite={favorite}
                     deleteFavorite = {deleteFavorite}/>
@@ -41,7 +46,11 @@ const Router = () => {
                     <SurpriseCard 
                     random={true}/>
                 </Route>
-            </Switch>
+
+                <Route path="*">
+                    <NotFound />
+                </Route>
+            </Switch></div></div>
         </BrowserRouter>
     </div>
     );
