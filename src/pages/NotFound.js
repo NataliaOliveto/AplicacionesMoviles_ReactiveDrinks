@@ -3,18 +3,20 @@ import styled from "styled-components";
 
 const NotFound = () => {
   const history = useHistory();
-  return (
-    <DrinkDetails>
-      <h2>Oops! This page is empty</h2>
-      <p>Just like your glass.</p>
-      <p>Go back and fill it with a great recipe!</p>
-      <img src="/img/404notfound.jpg" alt="404 page not found"></img>
-      <button onClick={() => history.push("./")}>Back Home</button>
-    </DrinkDetails>
-  );
+    return (
+      <DrinkDetails>
+        <h2>Oops! This page is empty</h2>
+        <p>Just like your glass.</p>
+        <p>Go back and fill it with a great recipe!</p>
+        <img src="/img/404notfound.jpg" alt="404 page not found"></img>
+        <button onClick={() => history.push("./")}>Back Home</button>
+      </DrinkDetails>
+    );
 };
 
 const DrinkDetails = styled.div`
+  margin-top: 50px;
+
   h2 {
     font-size: 20px;
     color: #f1356d;
@@ -56,6 +58,7 @@ const DrinkDetails = styled.div`
       font-weight: 600;
     }
   }
-`;
+  
+`
 
 export default NotFound;

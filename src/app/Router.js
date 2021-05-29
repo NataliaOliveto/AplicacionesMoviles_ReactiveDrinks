@@ -65,7 +65,7 @@ const Router = () => {
                 <FavoritesCard 
                     addFavorite={handleAddFavorite}
                     favorite={favorite}
-                    deleteFavorite = {deleteFavorite}
+                    deleteFavorite = {deleteFavorite}   
                     />
                 </Route>
 

@@ -7,6 +7,12 @@ const Home = ({ setDrink }) => {
     const history = useHistory();
     const [drinkData, setDrinkData] = React.useState();
 
+    React.useEffect(() => {
+        fetch(`https://www.thecocktaildb.com/api/json/v1/1/random.php`)
+        .then((response) => response.json()
+        .then((data) => setDrinkData(data)))
+    }, []);  
+
     function handleSearchClick(){
         setDrink(input);        
         history.replace("/card");
@@ -25,21 +31,15 @@ const Home = ({ setDrink }) => {
         history.replace("/card");
     }
 
-    React.useEffect(() => {
-        fetch(`https://www.thecocktaildb.com/api/json/v1/1/random.php`)
-        .then((response) => response.json()
-        .then((data) => setDrinkData(data)))
-    }, []);    
-
     return ( 
         <HomeStyle>  
-        <div>  
-            <input
-            placeholder="your favorite drink"
-            value={input} 
-            onChange={handleInputChange} 
-            type="text" />
-        </div>
+
+                <input
+                placeholder="type and find your favorite drink"
+                value={input} 
+                onChange={handleInputChange} 
+                type="text" />
+
             <ButtonsWrapper>
                 <button disabled={!input} onClick={handleSearchClick}>Find drink</button>
                 <button onClick={handleSurpriseClick}>Surprise drink</button>
@@ -52,9 +52,7 @@ const Home = ({ setDrink }) => {
             </Suggestion>
         </HomeStyle>
     );
-}
-
-
+};
 
 const HomeStyle = styled.div`
     display: flex;
@@ -62,7 +60,26 @@ const HomeStyle = styled.div`
     justify-content: center;
     align-items: center;
     padding: 40px;
-    
+
+    input{
+        margin-bottom: 10px;
+        box-shadow: 1px 3px 5px rgba(0,0,0,0.1);         
+        border: 0px transparent;
+        border-radius: 5px;
+        height: 25px;
+        width: 250px;
+        font-size: 1em;
+
+        &::placeholder {
+            color: grey;
+        }
+
+        &:focus{
+            outline: solid;
+            outline-width: 1px;
+            outline-color: #f1356d;
+        }
+    }
 `;
 
 const ButtonsWrapper = styled.div`
@@ -78,7 +95,7 @@ const ButtonsWrapper = styled.div`
         padding: 5px;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 0.75em;
+        font-size: 1.1em;
         display: block;
         margin: auto;
         text-align: center;  
@@ -130,6 +147,7 @@ const Suggestion = styled.div`
             visibility: visible;
         }
     }
+
     button {
         visibility: hidden;
         background-color: #f1356d;
@@ -157,11 +175,13 @@ const Suggestion = styled.div`
         width: 50%;
         }
     }
+
     h2{
         color: grey;
         padding: 5px;
         margin-bottom: 0px;
     }
+
     h3{
         font-size: 20px;
         color: #f1356d;

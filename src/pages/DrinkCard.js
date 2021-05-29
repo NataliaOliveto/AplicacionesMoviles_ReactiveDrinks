@@ -1,9 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { useHistory } from 'react-router';
+
 const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
+
   const [drinkData, setDrinkData] = React.useState();
   const [status, setStatus] = React.useState("idle");
   const favoriteNames = favorite.map((favorite) => favorite.strDrink);
+  const history = useHistory();
 
   React.useEffect(() => {
     setStatus("loading");
@@ -35,28 +39,40 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
         <h2>Our recommended drinks for: {drink.toUpperCase()}</h2>
         {drinkData.drinks.map((eachDrink, i) => (
           <DrinkDetails key={i}>
-            <h2>{eachDrink.strDrink}</h2>
+            <CardTitle>
+              <h2>{eachDrink.strDrink}</h2>
+              <button onClick={() => handleSetFavorite(eachDrink)}>
+                {favoriteNames.includes(eachDrink.strDrink) ? "❤" : "♡"}
+              </button>
+            </CardTitle>
             <h3>
               {eachDrink.strAlcoholic} | {eachDrink.strCategory}
             </h3>
             {<img src={eachDrink.strDrinkThumb} alt={eachDrink.strDrink}></img>}
             <h3>↓ Recipe details ↓</h3>
             <p>{eachDrink.strInstructions}</p>
-            <button onClick={() => handleSetFavorite(eachDrink)}>
-              {favoriteNames.includes(eachDrink.strDrink) ? "❤" : "♡"}
-            </button>
           </DrinkDetails>
         ))}
       </Results>
     );
   } else if (status === "loading") {
-    return <StateMessage>Loading...</StateMessage>;
+    return (
+      <StateMessage>
+        Loading...
+      </StateMessage>
+    )
   } else if (!drinkData || status === "error") {
-    return <StateMessage>We don't know that drink (yet!)</StateMessage>;
+    return (
+    <StateMessage>
+      We don't know that drink (yet!)
+      <button onClick={() => history.push("./")}>Back Home</button>
+    </StateMessage>
+    )
   }
 };
 
 const StateMessage = styled.div`
+
   margin-top: 50px;
   font-size: 30px;
   color: grey;
@@ -64,6 +80,7 @@ const StateMessage = styled.div`
   background-color: white;
   animation-name: fadein;
   animation-duration: 0.5s;
+
   @keyframes fadein {
     from {
       opacity: 0;
@@ -72,9 +89,32 @@ const StateMessage = styled.div`
       opacity: 1;
     }
   }
-`;
+
+  button {
+    background-color: #f1356d;
+    color: #fff;
+    border: 0;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.75em;
+    display: block;
+    margin: auto;
+    text-align: center;  
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all ease-out 0.1s;
+
+    &:hover {
+      filter: brightness(1.20);
+      transform: translateY(2px);        
+      font-weight: 600;
+    }
+  }
+`
 
 const Results = styled.div`
+
   h2 {
     font-size: 15px;
     color: grey;
@@ -82,8 +122,9 @@ const Results = styled.div`
     text-align: left;
     border-bottom: 1px solid #f2f2f2;
   }
-`;
+`
 const DrinkDetails = styled.div`
+
   box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.1);
   padding: 15px;
   text-align: justify;
@@ -91,17 +132,7 @@ const DrinkDetails = styled.div`
   margin: 30px;
   width: 500px;
   animation-name: fadein;
-  animation-duration: 2s;
-
-  h2 {
-    font-size: 20px;
-    color: white;
-    background-color: #f1356d;
-    border-radius: 10px;
-    padding: 5px;
-    text-align: center;
-    margin-bottom: 10px;
-  }
+  animation-duration: 2s;  
 
   h3 {
     font-size: 15px;
@@ -127,29 +158,49 @@ const DrinkDetails = styled.div`
       opacity: 1;
     }
   }
+  
+  p{
+    width: 400px;
+    padding: 0px 50px;
+  }
+`
+
+const CardTitle = styled.div`
+  display: flex;
+  align-items: center;  
+  justify-content: center;
+
+  h2 {
+      font-size: 20px;
+      color: white;
+      background-color: #f1356d;
+      border-radius: 10px;
+      padding: 5px;
+      text-align: center;
+      width: 400px;
+      margin-left: 50px;
+  }
 
   button {
     background-color: #f1356d;
     color: #fff;
-    border: 0;
     padding: 5px;
     cursor: pointer;
-    display: block;
-    margin: auto;
     text-align: center;
-    margin-top: 8px;
+    margin: 0;
+    margin-left: 10px;
     cursor: pointer;
     transition: all ease-out 0.1s;
-    width: 10%;
-    font-size: 30px;
+    width: 50px;
+    font-size: 20px;    
+    border: 0;
     border-radius: 70px;
 
     &:hover {
-      filter: brightness(1.2);
-      transform: translateY(2px);
+      transform: translateY(-2px);
       font-weight: 600;
     }
   }
-`;
+`
 
 export default DrinkCard;
