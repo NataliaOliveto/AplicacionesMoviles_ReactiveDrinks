@@ -5,9 +5,9 @@ const Navbar = () => {
     return (
         <NavbarStyle>
             <img src="/img/icon.png" alt="logo"></img>
-            <h1>Reactive Drinks</h1>
+            <h1><Link to="/">Reactive Drinks</Link></h1>
             <div className="links">
-            <Link to="/">Home</Link>
+            <Link to="/favorites">Favorites</Link>
             </div>
         </NavbarStyle>
     );

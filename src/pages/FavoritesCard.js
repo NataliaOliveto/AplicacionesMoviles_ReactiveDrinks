@@ -1,25 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
-  const [drinkData, setDrinkData] = React.useState();
-  const [status, setStatus] = React.useState("idle");
-  const favoriteNames = favorite.map((favorite) => favorite.strDrink);
 
-  React.useEffect(() => {
-    setStatus("loading");
-    fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${drink}`)
-      .then((response) =>
-        response.json().then((data) => {
-          if (data.drinks === null) {
-            setStatus("error");
-          } else {
-            setDrinkData(data);
-            setStatus("success");
-          }
-        })
-      )
-      .catch((error) => setStatus("error"));
-  }, [drink]);
+export const FavoritesCard = ( {addFavorite, favorite, deleteFavorite} ) => {
+
+  const favoriteNames = favorite.map((favorite) => favorite.strDrink);
 
   const handleSetFavorite = (eachDrink) => {
     if (favoriteNames.includes(eachDrink.strDrink)) {
@@ -29,11 +13,11 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
     }
   };
 
-  if (drinkData && status === "success") {
+  if (favorite.length > 0) {
     return (
       <Results>
-        <h2>Our recommended drinks for: {drink.toUpperCase()}</h2>
-        {drinkData.drinks.map((eachDrink, i) => (
+        <h2>Your favorites: </h2>
+        {favorite.map((eachDrink, i) => (
           <DrinkDetails key={i}>
             <h2>{eachDrink.strDrink}</h2>
             <h3>
@@ -49,30 +33,10 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
         ))}
       </Results>
     );
-  } else if (status === "loading") {
-    return <StateMessage>Loading...</StateMessage>;
-  } else if (!drinkData || status === "error") {
-    return <StateMessage>We don't know that drink (yet!)</StateMessage>;
+  } else {
+    return <StateMessage>NO TENES FAVORITOS...</StateMessage>;
   }
 };
-
-const StateMessage = styled.div`
-  margin-top: 50px;
-  font-size: 30px;
-  color: grey;
-  text-align: center;
-  background-color: white;
-  animation-name: fadein;
-  animation-duration: 0.5s;
-  @keyframes fadein {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-`;
 
 const Results = styled.div`
   h2 {
@@ -152,4 +116,20 @@ const DrinkDetails = styled.div`
   }
 `;
 
-export default DrinkCard;
+const StateMessage = styled.div`
+  margin-top: 50px;
+  font-size: 30px;
+  color: grey;
+  text-align: center;
+  background-color: white;
+  animation-name: fadein;
+  animation-duration: 0.5s;
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+`;

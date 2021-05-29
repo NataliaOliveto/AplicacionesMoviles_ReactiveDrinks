@@ -24,7 +24,6 @@ const SurpriseCard = ( { addFavorite, favorite, deleteFavorite } ) => {
     }, []);
 
     const favoriteNames = favorite.map(favorite => favorite.strDrink)
-    console.log(favoriteNames);
 
     const isDrinkFavorite = drinkData && favoriteNames.includes(drinkData.drinks[0].strDrink);
 
