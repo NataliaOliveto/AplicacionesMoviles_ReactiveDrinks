@@ -17,10 +17,12 @@ const Router = () => {
 
     function handleAddFavorite(drink){
         setFavorite((oldFavorite) => [...oldFavorite, drink]);
+        //window.localStorage.setItem('favorite', favorite)
     }
 
     function deleteFavorite(drinkName){
         setFavorite(favorite.filter((favorite) => favorite.strDrink !== drinkName));
+        //window.localStorage.setItem('favorite', favorite)
     }
 
     return (
@@ -43,8 +45,11 @@ const Router = () => {
                 </Route>
 
                 <Route path="/surprisecard">
-                    <SurpriseCard 
-                    random={true}/>
+                    <SurpriseCard
+                    addFavorite={handleAddFavorite}
+                    favorite={favorite}
+                    deleteFavorite = {deleteFavorite}
+                    />
                 </Route>
 
                 <Route path="*">

@@ -2,7 +2,7 @@ import React from "react";
 import { useHistory } from 'react-router';
 import styled from "styled-components";
 
-const SurpriseCard = ( {random} ) => {
+const SurpriseCard = ( { addFavorite, favorite, deleteFavorite } ) => {
 
     const [drinkData, setDrinkData] = React.useState();
     const history = useHistory();
@@ -21,37 +21,69 @@ const SurpriseCard = ( {random} ) => {
             }
         }))
         .catch(error => setStatus("error"))
-    }, [random]);
+    }, []);
+
+    const favoriteNames = favorite.map(favorite => favorite.strDrink)
+    console.log(favoriteNames);
+
+    const isDrinkFavorite = drinkData && favoriteNames.includes(drinkData.drinks[0].strDrink);
 
     if(drinkData && status === "success"){
         return (
             <DrinkDetails>
-                <div>
-                <h2>{drinkData.drinks[0].strDrink}</h2>
+                    <h2>{drinkData.drinks[0].strDrink}</h2>
                     <h3>{drinkData.drinks[0].strAlcoholic} drink</h3>        
                     {<img src={drinkData.drinks[0].strDrinkThumb} alt={drinkData.drinks[0].strDrink}></img>}
-                    <h3>Recipe</h3>
-                    <p>{drinkData.drinks[0].strInstructions}</p>
+                    <h3>↓ Recipe details ↓</h3>
+                    <p>{drinkData.drinks[0].strInstructions}</p>                    
                     <ButtonsWrapper>
+                        <button onClick={
+                            isDrinkFavorite
+                            ? () => deleteFavorite(drinkData.drinks[0].strDrink) 
+                            : () => addFavorite(drinkData.drinks[0])
+                            }>
+                            {isDrinkFavorite ? "❤" : "♡"}
+                        </button>                        
                         <button onClick={() => history.push("./")}>Back Home</button>
                     </ButtonsWrapper>
-                </div>
             </DrinkDetails>
         ) ;  
     } else if(status === "loading"){
-        return "Loading...";
+        return (   
+            <StateMessage>
+                Loading...
+            </StateMessage>             
+        );
     }
     else if (!drinkData || status === "error"){
-        return "We don't know that drink (yet)";
+        return <StateMessage>
+                    We don't know that drink (yet!)
+                </StateMessage>
     }
 
 };
+
+const StateMessage = styled.div`
+    margin-top: 50px;
+    font-size: 30px;
+    color: grey;
+    text-align: center;
+    background-color: white;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }           
+    }
+`
 
 const DrinkDetails = styled.div`
     box-shadow: 1px 3px 5px rgba(0,0,0,0.1); 
     padding: 15px;
     text-align: justify;
     border-radius: 15px;
+    margin: 30px;
+    width: 500px;
     animation-name: fadein;
     animation-duration: 2s;
 
@@ -110,6 +142,11 @@ const ButtonsWrapper = styled.div`
         font-weight: 600;
         }
         &:first-child {
+        width: 10%;
+        font-size: 30px;
+        border-radius: 70px;
+        }
+        &:last-child{
         width: 20%;
         }
     }

@@ -8,7 +8,7 @@ const NotFound = () => {
         <h2>Oops! This page is empty</h2>
         <p>Just like your glass.</p>
         <p>Go back and fill it with a great recipe!</p>
-        <img src="https://cdn.beeradvocate.com/im/beers/392937.jpg" alt="404 page not found"></img>
+        <img src="/img/404notfound.jpg" alt="404 page not found"></img>
         <button onClick={() => history.push("./")}>Back Home</button>
         </DrinkDetails>
     );

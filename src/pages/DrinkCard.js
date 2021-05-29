@@ -21,20 +21,30 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
         .catch(error => setStatus("error"))
     }, [drink]);
 
+    const favoriteNames = favorite.map(favorite => favorite.strDrink)
+    //const isDrinkFavorite = drinkData && favoriteNames.includes(drinkData.drinks[0].strDrink);
+
+    console.log(favoriteNames);
+
     if(drinkData && status === "success"){
         
         return(
             <Results>
                 <h2>Our recommended drinks for: { drink.toUpperCase() }</h2> 
-                {drinkData.drinks.map(eachDrink => (
-                <DrinkDetails>
-                    <div>
+                {drinkData.drinks.map((eachDrink,i) => (
+                <DrinkDetails key={i}>
                     <h2>{eachDrink.strDrink}</h2>
                     <h3>{eachDrink.strAlcoholic} | {eachDrink.strCategory}</h3>        
                     {<img src={eachDrink.strDrinkThumb} alt={eachDrink.strDrink}></img>  }
                     <h3>↓ Recipe details ↓</h3>
                     <p>{eachDrink.strInstructions}</p>
-                    </div>
+                    <button onClick={
+                    (() => favoriteNames.includes(eachDrink.strDrink))
+                    ? () => deleteFavorite(eachDrink.strDrink) 
+                    : () => addFavorite(eachDrink)
+                    }>
+                    {(() => favoriteNames.includes(eachDrink.strDrink)) ? "❤" : "♡"}
+                    </button>
                 </DrinkDetails>
                 ))}
                 
@@ -42,29 +52,33 @@ const DrinkCard = ({ drink, addFavorite, favorite, deleteFavorite }) => {
         )        
 
     } else if(status === "loading"){
-            return (                
-                "loading"
+            return (   
+                <StateMessage>
+                    Loading...
+                </StateMessage>             
             );
     }
     else if (!drinkData || status === "error"){
-        return "We don't know that drink (yet)";
+        return <StateMessage>
+                    We don't know that drink (yet!)
+                </StateMessage>
     }
-    /*
-    const favoriteNames = favorite.map(favorite => favorite.strDrink)
-    const isDrinkFavorite = drinkData && favoriteNames.includes(drinkData.drinks[0].strDrink);
 
-    console.log(addFavorite(drinkData.[0].strDrink));
-
-    <button onClick={
-                    isDrinkFavorite
-                    ? () => deleteFavorite(drinkData.drinks[0].strDrink) 
-                    : () => addFavorite(drinkData)
-                    }>
-                    {isDrinkFavorite ? "Remove Fav" : "Add Fav"}
-                </button> */
 };
 
-
+const StateMessage = styled.div`
+    margin-top: 50px;
+    font-size: 30px;
+    color: grey;
+    text-align: center;
+    background-color: white;
+    animation-name: fadein;
+    animation-duration: 0.5s;
+    @keyframes fadein {
+        from { opacity: 0; }
+        to   { opacity: 1; }           
+    }
+`
 
 const Results = styled.div`
     h2{
@@ -112,13 +126,33 @@ const DrinkDetails = styled.div`
         border-radius: 10px;
     }
 
-    p{
-        position: relative;
-    }
-
     @keyframes fadein {
         from { opacity: 0; }
         to   { opacity: 1; }           
+    }
+
+    button {
+        background-color: #f1356d;
+        color: #fff;
+        border: 0;
+        padding: 5px;
+        cursor: pointer;
+        display: block;
+        margin: auto;
+        text-align: center;  
+        margin-top: 8px;
+        cursor: pointer;
+        transition: all ease-out 0.1s;
+        width: 10%;
+        font-size: 30px;
+        border-radius: 70px;
+
+        &:hover {
+        filter: brightness(1.20);
+        transform: translateY(2px);        
+        font-weight: 600;
+        }
+
     }
 `
 

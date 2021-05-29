@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
     return (
         <NavbarStyle>
-            <img src="./img/icon.png" alt="logo"></img>
+            <img src="/img/icon.png" alt="logo"></img>
             <h1>Reactive Drinks</h1>
             <div className="links">
             <Link to="/">Home</Link>
@@ -24,6 +24,7 @@ const NavbarStyle = styled.nav`
     position: sticky; 
     top: 0;
     background-color: white;
+
     h1 {
         padding-left: 20px;
         color: #f1356d;
